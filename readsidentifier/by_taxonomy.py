@@ -97,7 +97,7 @@ def cat_to_name(infile,PathToTaxonomy,suffix):
 		DictValues=line.split('\t')
 		if DictValues[6]=="scientific name":
 			namesdict[DictValues[0]]=DictValues[2]
-	outfile=open(suffix+".final",'w')
+	outfile=open(suffix,'w')
 	for line in fileinput.input([infile]):
 		HitValues=line.strip().split('\t')
 		n=1
