@@ -65,6 +65,10 @@ To use the script, prepare config file (example sample-config.txt)...
 then run 
 python readidentifier.py config.txt
 
+OUTPUT
+
+A number of output files are generated, for result please look at outputprefix.final files. When paired-end analyses is done, 3 .final files are generated. outputprefix.final will contain the paired end analyses results. While blastout1.XXX.final and blastout2.XXX.final contain the single end analyses results
+
 CITATION
 
 If using these scripts, cite:
