@@ -12,6 +12,6 @@ setup(name='readsidentifier',
 	py_modules=['readsidentifier/compare_pe','readsidentifier/by_taxonomy','readsidentifier/match_GiToTaxID','readsidentifier/parse_by_ID'],
 	long_description=open('README.txt').read(),
 	license='GPL v3',
-	url='https://github.com/asrivathsan/readsidentifier',
+	url='https://github.com/asrivathsan/readsidentifier-1.0',
 	)
 
