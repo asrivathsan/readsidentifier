@@ -67,6 +67,14 @@ python readidentifier.py config.txt
 OUTPUT
 
 A number of output files are generated, for result please look at outputprefix.final files. When paired-end analyses is done, 3 .final files are generated. outputprefix.final will contain the paired end analyses results, while blastout1.XXX.final and blastout2.XXX.final contain the single end analyses results
+Briefly,
+.withtaxid : contains the initial blastout with taxid information as final column
+.withtaxid.bylen** : post-filtering by hit length, this file contains sequences with best identity to reference
+.withtaxid.bylen**.byid** : post filtering by identity threshold
+.withtaxid.bylen**.byid**.cat: the previous file along with all the parent taxid information in various columns
+.withtaxid.bylen**.byid**.cat.con: retains only taxid & parent taxid corresponding to species,genus,family,order,class,phylum. Creates a consistency profile such that sequences with ambiguous matches to different taxids from now termed ambiguous
+.final: converts the taxid information to scientific names
+
 
 CITATION
 
