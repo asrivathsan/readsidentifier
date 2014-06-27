@@ -18,7 +18,7 @@ Note 1: Do not use -parse_seqids command, especially if dealing with genbank dow
 
 Note 2: Blast ignores anything after a space in the sequence header. If you databasefastfile.fasta contains these, in blastoutput you will lose all information beyond the space. 
 
-Note 3: currently this software has been tested on Ubuntu LTS 12.04/13.04. Please inform if incompatible with Mac.
+Note 3: currently these scripts have been tested on Ubuntu LTS 12.04/13.04. Please inform if incompatible with Mac.
 
 INSTALLATION
 
