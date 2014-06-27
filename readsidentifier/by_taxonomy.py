@@ -53,7 +53,7 @@ def tax_to_cat(infile,PathToTaxonomy):
 				outfile.write('\t'+cat)
 			outfile.write('\n')
 		except KeyError:
-			dmpfile.write(TaxID+'\n')
+			dmpfile.write(line)
 	outfile.close()
 	dmpfile.close()
 	
