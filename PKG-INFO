@@ -2,7 +2,7 @@ Metadata-Version: 1.0
 Name: readsidentifier
 Version: 1.0
 Summary: a pipeline for BLAST based read identifications
-Home-page: https://github.com/asrivathsan/readsidentifier
+Home-page: https://github.com/asrivathsan/readsidentifier-1.0
 Author: Amrita Srivathsan
 Author-email: asrivathsan@gmail.com
 License: GPL v3
