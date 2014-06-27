@@ -59,7 +59,7 @@ def parse(InFileName,LengthCutoff):
 				FilteredHits[ID].append(hit)
 
 
-	outfile=open(InFileName+".parsed.lencutoff"+LengthCutoff,'w')
+	outfile=open(InFileName+".bylen"+LengthCutoff,'w')
 
 	for ID in FilteredHits.keys():
 		for hit in FilteredHits[ID]:
