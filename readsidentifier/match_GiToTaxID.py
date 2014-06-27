@@ -29,7 +29,7 @@ def matchdb(infile,db,PathToDB):
 				print "Bypassing this line"
 				pass
 		n=n+1
-	outfile=open(infile+".withgi",'a')
+	outfile=open(infile+".withtaxid",'a')
 	fileinput.close()
 	for line in fileinput.input([infile]):
 		HitValues=line.split('\t')
