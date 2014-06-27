@@ -14,7 +14,7 @@ blastout2=/home/user/test/blastout_end2
 # Ignores Blastoutput file2 if single-end. Blastoutput files must be in outfmt 6.
 
 identity=98
-# species identity threshold
+# match identity threshold
 
 lencutoff=49
 # hit length cutoff for the parse_by_id command
