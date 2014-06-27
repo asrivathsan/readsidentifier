@@ -18,16 +18,15 @@ Note 1: Do not use -parse_seqids command, especially if dealing with genbank dow
 
 Note 2: Blast ignores anything after a space in the sequence header. If you databasefastfile.fasta contains these, in blastoutput you will lose all information beyond the space. 
 
+Note 3: currently this software has been tested on Ubuntu LTS 12.04/13.04. Please inform if incompatible with Mac.
+
 INSTALLATION
 
 3 parts to this:
 
-1) Download data from ....
+1) The repository is in github and can be downloaded like any other, as follows:
 
-For installation locally type
-
-python setup.py sdist
-
+git clone https://github.com/asrivathsan/readsidentifier-1.0
 
 2) Download ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz. Extract data to a new folder in the filesystem
 
@@ -67,7 +66,7 @@ python readidentifier.py config.txt
 
 OUTPUT
 
-A number of output files are generated, for result please look at outputprefix.final files. When paired-end analyses is done, 3 .final files are generated. outputprefix.final will contain the paired end analyses results. While blastout1.XXX.final and blastout2.XXX.final contain the single end analyses results
+A number of output files are generated, for result please look at outputprefix.final files. When paired-end analyses is done, 3 .final files are generated. outputprefix.final will contain the paired end analyses results, while blastout1.XXX.final and blastout2.XXX.final contain the single end analyses results
 
 CITATION
 
