@@ -70,15 +70,15 @@ def mastertax(inputfile):
 		match_GiToTaxID.matchdb(inputfile,db,PathToDB)
 	match_GiToTaxID.dmp(inputfile)
 	print "matched gi to taxid. Now parsing output by length..." 
-	parse_by_ID.parse(inputfile+".withgi",lencutoff)
+	parse_by_ID.parse(inputfile+".withtaxid",lencutoff)
 	print "creating taxonomy profile" 
-	bt.best_by_id(inputfile+".withgi.parsed.lencutoff"+lencutoff,idcutoff)
-	bt.tax_to_cat(inputfile+".withgi.parsed.lencutoff"+lencutoff+'.byid'+idcutoff,PathToTaxonomy)
-	bt.consist(inputfile+".withgi.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat',PathToTaxonomy)
+	bt.best_by_id(inputfile+".withtaxid.parsed.lencutoff"+lencutoff,idcutoff)
+	bt.tax_to_cat(inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff,PathToTaxonomy)
+	bt.consist(inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat',PathToTaxonomy)
 	if Type=='s':
-		bt.cat_to_name(inputfile+".withgi.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat.con',PathToTaxonomy,prefix)
+		bt.cat_to_name(inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat.con',PathToTaxonomy,prefix)
 	if Type=='p':
-		bt.cat_to_name(inputfile+".withgi.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat.con',PathToTaxonomy,inputfile+".withgi.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat.con.final')
+		bt.cat_to_name(inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat.con',PathToTaxonomy,inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat.con.final')
 
 mastertax(blastout1)
 
@@ -86,6 +86,6 @@ if Type=='p':
 	print "Processing end 2"
 	mastertax(blastout2)
 	print "comparing end 1 and end 2"
-	compare_pe.consistpe(blastout1+".withgi.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat',blastout2+".withgi.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat',PathToTaxonomy, prefix)
+	compare_pe.consistpe(blastout1+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat',blastout2+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat',PathToTaxonomy, prefix)
 	compare_pe.cat_to_name(prefix,PathToTaxonomy)
 
