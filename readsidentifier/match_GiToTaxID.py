@@ -56,7 +56,7 @@ def dmp(infile):
 	for line in fileinput.input([infile]):
 		infileids[line.split('\t')[0]]=line
 	fileinput.close()
-	outfile=infile+".withgi"
+	outfile=infile+".withtaxid"
 	outfileids={}
 	for line in fileinput.input([outfile]):
 		outfileids[line.split('\t')[0]]=''
