@@ -68,7 +68,7 @@ def consist(infile,PathToTaxonomy):
 	fileinput.close()
 	for line in fileinput.input([infile]):
 		HitValues=line.strip().split('\t')
-		TargetCategories[HitValues[0]]={'species':[],'genus':[],'family':[],'order':[],'phylum':[],'class':[],'division':[]}
+		TargetCategories[HitValues[0]]={'perc':HitValues[2],'species':[],'genus':[],'family':[],'order':[],'phylum':[],'class':[],'division':[]}
 	fileinput.close()
 	for line in fileinput.input([infile]):
 		HitValues=line.strip().split('\t')
@@ -83,11 +83,13 @@ def consist(infile,PathToTaxonomy):
 	for ID in TargetCategories.keys():
 		LCA_per_ID={}
 		for cat in TargetCategories[ID].keys():
-			if len(TargetCategories[ID][cat])!=1:
+			if len(TargetCategories[ID][cat])>1:
+				LCA_per_ID[cat]=str(','.join(TargetCategories[ID][cat]))
+			elif len(TargetCategories[ID][cat])==0:
 				LCA_per_ID[cat]='n'+str(len(TargetCategories[ID][cat]))
 			else:
 				LCA_per_ID[cat]=TargetCategories[ID][cat][0]
-		outfile.write(ID+'\t'+LCA_per_ID['species']+'\t'+LCA_per_ID['genus']+'\t'+LCA_per_ID['family']+'\t'+LCA_per_ID['order']+'\t'+LCA_per_ID['class']+'\t'+LCA_per_ID['phylum']+'\t'+LCA_per_ID['division']+'\n')
+		outfile.write(ID+'\t'+TargetCategories[ID]['perc']+'\t'+LCA_per_ID['species']+'\t'+LCA_per_ID['genus']+'\t'+LCA_per_ID['family']+'\t'+LCA_per_ID['order']+'\t'+LCA_per_ID['class']+'\t'+LCA_per_ID['phylum']+'\t'+LCA_per_ID['division']+'\n')
 	outfile.close()
 
 # convert taxid information to scienctific names
@@ -100,16 +102,21 @@ def cat_to_name(infile,PathToTaxonomy,suffix):
 	outfile=open(suffix,'w')
 	for line in fileinput.input([infile]):
 		HitValues=line.strip().split('\t')
-		n=1
-		IDValues=[HitValues[0]]
-		while n<8:
+		n=2
+		IDValues=[HitValues[0],HitValues[1]]
+		while n<9:
 			try:
 				IDValues.append(namesdict[HitValues[n]])
 			except KeyError:
-				IDValues.append(HitValues[n])
+				try:
+					newlist=[]
+					for each in HitValues[n].split(','):
+						newlist.append(namesdict[each])
+					IDValues.append(",".join(newlist))
+				except KeyError:
+					IDValues.append(HitValues[n])
 			n=n+1
 		for value in IDValues:
 			outfile.write(value+'\t')
 		outfile.write('\n')
 	outfile.close()
-
