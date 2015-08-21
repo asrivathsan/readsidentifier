@@ -1,16 +1,23 @@
 ##Ensure there are no spaces in the paths. Input BLASTOUTPUT file must be generated using outfmt 6 (tabular) format.
 
-PathToTaxonomy= /home/user/genbank/Taxonomy
+PathToTaxonomy= /home/user/taxonomy
 # Download ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz. Change the PathToTaxfiles to the folder where your taxonomy files are kept. 
 
-PathToGiTaxid= /home/amrita/genbank/gi_tax
-# GiNumber to Taxid files
+GiTaxIDopt=n
+# Do you want to associate sequence ID or gi to Taxid? Type y if yes and n if no.
 
-Type= s
+PathToGiTaxid= /home/user/gi_tax
+# GiNumber to Taxid files, what you key in will be ignored if you set GiTaxIDopt as 'n'
+
+ParseMethod=score
+# How do you want to parse your data? By Alignment Score (score), or by Percentage identity (identity)
+
+
+Type= p
 # s=single end, p=paired end. 
 
-blastout1=/home/user/test/blastout_end1
-blastout2=/home/user/test/blastout_end2
+blastout1=/home/user/end1
+blastout2=/home/user/end2
 # Ignores Blastoutput file2 if single-end. Blastoutput files must be in outfmt 6.
 
 identity=98
@@ -19,7 +26,6 @@ identity=98
 lencutoff=49
 # hit length cutoff for the parse_by_id command
 
-outputfileprefix=/home/user/test/result
+outputfileprefix=/home/user/out
 # Prefix to result file along with the full path (else output files will be written in the current location from where the script is run). 
-
 
