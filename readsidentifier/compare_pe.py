@@ -59,7 +59,9 @@ def consistpe(inputfile1,inputfile2,PathToDB,outfile):
 	for ID in DictBothEnds.keys():
 		LCA_per_ID={}
 		for cat in DictBothEnds[ID].keys():
-			if len(DictBothEnds[ID][cat])!=1:
+			if len(DictBothEnds[ID][cat])>1:
+				LCA_per_ID[cat]=str(','.join(DictBothEnds[ID][cat]))
+			elif len(DictBothEnds[ID][cat])==0:
 				LCA_per_ID[cat]='n'+str(len(DictBothEnds[ID][cat]))
 			else:
 				LCA_per_ID[cat]=DictBothEnds[ID][cat][0]
@@ -81,10 +83,15 @@ def cat_to_name(infile,PathToDB):
 			try:
 				Ls_per_ID.append(namesdict[IDValues[n]])
 			except KeyError:
-				Ls_per_ID.append(IDValues[n])
+				try:
+					newlist=[]
+					for each in IDValues[n].split(','):
+						newlist.append(namesdict[each])
+					Ls_per_ID.append(",".join(newlist))
+				except KeyError:
+					Ls_per_ID.append(IDValues[n])
 			n=n+1
 		for value in Ls_per_ID:
 			outfile.write(value+'\t')
 		outfile.write('\n')
-
 
