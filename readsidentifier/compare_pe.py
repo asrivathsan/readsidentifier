@@ -1,5 +1,3 @@
-# readsidentifier: a pipeline for BLAST based read identifications
-
 # Copyright 2014 Amrita Srivathsan
 
 # This program is free software; you can redistribute it and/or modify
@@ -15,87 +13,84 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# Contact: asrivathsan@gmail.com
+import sys,fileinput
+def consistpe(inputfile1,inputfile2,PathToDB,outfile):
+	DictEnd1={}
+	DictEnd2={}
+	outfile=open(outfile,'w')
+	catdict={}
+	for line in fileinput.input([PathToDB+"/nodes.dmp"]):
+		DictValues=line.strip().split('\t')
+		catdict[DictValues[0]]=DictValues[4]
+	for line in fileinput.input([inputfile1]):
+		HitValues=line.strip().split('\t')
+		DictEnd1[HitValues[0]]={'species':[],'genus':[],'family':[],'order':[],'phylum':[],'class':[],'division':[]}
+	fileinput.close()
+	for line in fileinput.input([inputfile2]):
+		HitValues=line.strip().split('\t')
+		DictEnd2[HitValues[0]]={'species':[],'genus':[],'family':[],'order':[],'phylum':[],'class':[],'division':[]}
+	fileinput.close()
+	for line in fileinput.input([inputfile1]):
+		HitValues=line.strip().split('\t')
+		n=12
+		while n<len(HitValues):
+			for ID in DictEnd1[HitValues[0]].keys():
+				if catdict[HitValues[n]]==ID:
+					if HitValues[n] not in DictEnd1[HitValues[0]][ID]:
+						DictEnd1[HitValues[0]][ID].append(HitValues[n])
+			n=n+1
+	fileinput.close()
+	for line in fileinput.input([inputfile2]):
+		HitValues=line.strip().split('\t')
+		n=12
+		while n<len(HitValues):
+			for ID in DictEnd2[HitValues[0]].keys():
+				if catdict[HitValues[n]]==ID:
+					if HitValues[n] not in DictEnd2[HitValues[0]][ID]:
+						DictEnd2[HitValues[0]][ID].append(HitValues[n])
+			n=n+1
+	DictBothEnds={}
+	for ID in DictEnd1.keys():
+		if ID in DictEnd2.keys():
+			DictBothEnds[ID]={'species':[],'genus':[],'family':[],'order':[],'phylum':[],'class':[],'division':[]}
+	for ID in DictBothEnds.keys():
+		for cat in DictEnd1[ID].keys():
+			DictBothEnds[ID][cat]=list(set(DictEnd1[ID][cat])&set(DictEnd2[ID][cat]))
+	for ID in DictBothEnds.keys():
+		LCA_per_ID={}
+		for cat in DictBothEnds[ID].keys():
+			if len(DictBothEnds[ID][cat])>1:
+				LCA_per_ID[cat]=str(','.join(DictBothEnds[ID][cat]))
+			elif len(DictBothEnds[ID][cat])==0:
+				LCA_per_ID[cat]='n'+str(len(DictBothEnds[ID][cat]))
+			else:
+				LCA_per_ID[cat]=DictBothEnds[ID][cat][0]
+		outfile.write(ID+'\t'+LCA_per_ID['species']+'\t'+LCA_per_ID['genus']+'\t'+LCA_per_ID['family']+'\t'+LCA_per_ID['order']+'\t'+LCA_per_ID['class']+'\t'+LCA_per_ID['phylum']+'\t'+LCA_per_ID['division']+'\n')
 
+def cat_to_name(infile,PathToDB):
+	namesdict={}
+	for each in fileinput.input([PathToDB+"/names.dmp"]):
+		DictValues=each.split('\t')
+		if DictValues[6]=="scientific name":
+			namesdict[DictValues[0]]=DictValues[2]
 
-
-
-import fileinput, sys, os
-import readsidentifier.by_taxonomy as bt
-import readsidentifier.parse_by_ID as parse_by_ID
-import readsidentifier.parse_by_score as parse_by_score
-import readsidentifier.match_GiToTaxID as match_GiToTaxID
-import readsidentifier.compare_pe as compare_pe
-
-
-infile=open(sys.argv[1])
-InputValuesDict={}
-for line in infile.readlines():
-	if line[0]!='#':
-		if len(line.strip())>2:
-			InputValues=line.strip().split("=")
-			InputValuesDict[InputValues[0]]=InputValues[1].strip().replace(' ','')
-
-prefix=InputValuesDict["outputfileprefix"]
-print "results will be stored in .final file"
-idcutoff=InputValuesDict['identity']
-print "Setting Identity threshold as: " + str(idcutoff)
-lencutoff=InputValuesDict['lencutoff']
-print "Setting hit length threshold as: " + str(lencutoff)
-PathToDB=InputValuesDict['PathToGiTaxid']
-print "Setting path to gi_tax directory as: " + str(PathToDB)
-PathToTaxonomy=InputValuesDict['PathToTaxonomy']
-print "Setting path to Taxonomy directory as: " + str(PathToTaxonomy)
-dblist=os.listdir(PathToDB)
-print "There are " + str(len(dblist))+" files in gi_tax folder"
-Type=InputValuesDict["Type"]
-GiTaxIDopt=InputValuesDict['GiTaxIDopt']
-ParseMethod=InputValuesDict['ParseMethod']
-blastout1=InputValuesDict['blastout1']
-
-if Type=="s":
-	print "Processing as single end data"
-	print "Setting blastoutput file as:" + str(blastout1)
-
-if Type=="p":
-	try:
-		blastout2=InputValuesDict["blastout2"]
-		print "Processing as paired end data"
-		print "Setting blastoutput end1 file as:" + str(blastout1)
-		print "Setting blastoutput end2 file as:" + str(blastout2)
-	except KeyError:
-		print "check config file"
-
-
-def mastertax(inputfile):
-	if GiTaxIDopt=='y':
-		print "matching gi to taxid... this may take a while..."
-		for db in dblist:
-			print db
-			match_GiToTaxID.matchdb(inputfile,db,PathToDB)
-			print "matched gi to taxid. Now parsing output by length..." 
-	elif GiTaxIDopt=='n':
-		os.system("cp "+inputfile+ " " +inputfile+".withtaxid")
-	if ParseMethod=='score':
-		print "parsing blastoutput by length and score
-		parse_by_score.parse(inputfile+".withtaxid",lencutoff)
-	elif ParseMethod=='identity':
-		print "parsing blastoutput by length and identity
-		parse_by_ID.parse(inputfile+".withtaxid",lencutoff)
-	print "creating taxonomy profile" 
-	bt.best_by_id(inputfile+".withtaxid.parsed.lencutoff"+lencutoff,idcutoff)
-	bt.tax_to_cat(inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff,PathToTaxonomy)
-	bt.consist(inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat',PathToTaxonomy)
-	if Type=='s':
-		bt.cat_to_name(inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat.con',PathToTaxonomy,prefix+".final")
-	if Type=='p':
-		bt.cat_to_name(inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat.con',PathToTaxonomy,inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat.con.final')
-
-mastertax(blastout1)
-
-if Type=='p':
-	print "Processing end 2"
-	mastertax(blastout2)
-	print "comparing end 1 and end 2"
-	compare_pe.consistpe(blastout1+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat',blastout2+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff+'.cat',PathToTaxonomy, prefix)
-	compare_pe.cat_to_name(prefix,PathToTaxonomy)
+	outfile=open(infile+".final",'w')
+	for line in fileinput.input([infile]):
+		IDValues=line.strip().split('\t')
+		n=1
+		Ls_per_ID=[IDValues[0]]
+		while n<8:
+			try:
+				Ls_per_ID.append(namesdict[IDValues[n]])
+			except KeyError:
+				try:
+					newlist=[]
+					for each in IDValues[n].split(','):
+						newlist.append(namesdict[each])
+					Ls_per_ID.append(",".join(newlist))
+				except KeyError:
+					Ls_per_ID.append(IDValues[n])
+			n=n+1
+		for value in Ls_per_ID:
+			outfile.write(value+'\t')
+		outfile.write('\n')
