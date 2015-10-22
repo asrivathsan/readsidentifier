@@ -23,6 +23,7 @@
 import fileinput, sys, os
 import readsidentifier.by_taxonomy as bt
 import readsidentifier.parse_by_ID as parse_by_ID
+import readsidentifier.parse_by_score as parse_by_ID
 import readsidentifier.match_GiToTaxID as match_GiToTaxID
 import readsidentifier.compare_pe as compare_pe
 
@@ -48,6 +49,8 @@ print "Setting path to Taxonomy directory as: " + str(PathToTaxonomy)
 dblist=os.listdir(PathToDB)
 print "There are " + str(len(dblist))+" files in gi_tax folder"
 Type=InputValuesDict["Type"]
+GiTaxIDopt=InputValuesDict['GiTaxIDopt']
+ParseMethod=InputValuesDict['ParseMethod']
 blastout1=InputValuesDict['blastout1']
 
 if Type=="s":
@@ -65,12 +68,19 @@ if Type=="p":
 
 
 def mastertax(inputfile):
-	print "matching gi to taxid... this may take a while..."
-	for db in dblist:
-		match_GiToTaxID.matchdb(inputfile,db,PathToDB)
-	match_GiToTaxID.dmp(inputfile)
-	print "matched gi to taxid. Now parsing output by length..." 
-	parse_by_ID.parse(inputfile+".withtaxid",lencutoff)
+	if GiTaxIDopt=='y':
+		print "matching gi to taxid... this may take a while..."
+		for db in dblist:
+			match_GiToTaxID.matchdb(inputfile,db,PathToDB)
+		print "matched gi to taxid. Now parsing output by length..."
+	elif GiTaxIDopt=='n':
+		os.system("cp "+inputfile+ " " +inputfile+".withtaxid")
+	if ParseMethod=='score':
+		print "parsing blastoutput by length and score
+		parse_by_score.parse(inputfile+".withtaxid",lencutoff)
+	elif ParseMethod=='identity':
+		print "parsing blastoutput by length and identity
+		parse_by_ID.parse(inputfile+".withtaxid",lencutoff)
 	print "creating taxonomy profile" 
 	bt.best_by_id(inputfile+".withtaxid.parsed.lencutoff"+lencutoff,idcutoff)
 	bt.tax_to_cat(inputfile+".withtaxid.parsed.lencutoff"+lencutoff+'.byid'+idcutoff,PathToTaxonomy)
