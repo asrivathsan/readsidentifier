@@ -23,7 +23,7 @@
 import fileinput, sys, os
 import readsidentifier.by_taxonomy as bt
 import readsidentifier.parse_by_ID as parse_by_ID
-import readsidentifier.parse_by_score as parse_by_ID
+import readsidentifier.parse_by_score as parse_by_score
 import readsidentifier.match_GiToTaxID as match_GiToTaxID
 import readsidentifier.compare_pe as compare_pe
 
