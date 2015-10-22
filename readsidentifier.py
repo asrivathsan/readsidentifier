@@ -76,7 +76,7 @@ def mastertax(inputfile):
 	elif GiTaxIDopt=='n':
 		os.system("cp "+inputfile+ " " +inputfile+".withtaxid")
 	if ParseMethod=='score':
-		print "parsing blastoutput by length and score
+		print "parsing blastoutput by length and score"
 		parse_by_score.parse(inputfile+".withtaxid",lencutoff)
 	elif ParseMethod=='identity':
 		print "parsing blastoutput by length and identity
