@@ -79,7 +79,7 @@ def mastertax(inputfile):
 		print "parsing blastoutput by length and score"
 		parse_by_score.parse(inputfile+".withtaxid",lencutoff)
 	elif ParseMethod=='identity':
-		print "parsing blastoutput by length and identity
+		print "parsing blastoutput by length and identity"
 		parse_by_ID.parse(inputfile+".withtaxid",lencutoff)
 	print "creating taxonomy profile" 
 	bt.best_by_id(inputfile+".withtaxid.parsed.lencutoff"+lencutoff,idcutoff)
