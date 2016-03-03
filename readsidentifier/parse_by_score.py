@@ -49,7 +49,7 @@ def parse(InFileName,LengthCutoff):
 			HitValues=hit.split('\t')
 			ScoreToSubject=HitValues[11]
 			Score=ScoreToSubject.strip()
-			IDsublist.append(int(ScoreToSubject))
+			IDsublist.append(float(ScoreToSubject))
 		BestScore=max(IDsublist)
 		for hit in IdsWithHits[ID]:
 			HitValues=hit.split('\t')
