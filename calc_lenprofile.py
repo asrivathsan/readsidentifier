@@ -1,3 +1,4 @@
+#script which calculates length profile of sequences to then exclude sequences with incomplete overlaps from the blastoutput. Usage is python calc_lenprofile.py blastoutfile fastafilecontainingsequences outfilename
 import sys,fileinput
 o=open(sys.argv[1])
 
