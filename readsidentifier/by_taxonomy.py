@@ -68,7 +68,7 @@ def consist(infile,PathToTaxonomy):
 	fileinput.close()
 	for line in fileinput.input([infile]):
 		HitValues=line.strip().split('\t')
-		TargetCategories[HitValues[0]]={'perc':HitValues[2],'species':[],'genus':[],'family':[],'order':[],'phylum':[],'class':[],'division':[]}
+		TargetCategories[HitValues[0]]={'perc':HitValues[2],'species':[],'genus':[],'family':[],'order':[],'phylum':[],'class':[],'kingdom':[]}
 	fileinput.close()
 	for line in fileinput.input([infile]):
 		HitValues=line.strip().split('\t')
@@ -89,7 +89,7 @@ def consist(infile,PathToTaxonomy):
 				LCA_per_ID[cat]='n'+str(len(TargetCategories[ID][cat]))
 			else:
 				LCA_per_ID[cat]=TargetCategories[ID][cat][0]
-		outfile.write(ID+'\t'+TargetCategories[ID]['perc']+'\t'+LCA_per_ID['species']+'\t'+LCA_per_ID['genus']+'\t'+LCA_per_ID['family']+'\t'+LCA_per_ID['order']+'\t'+LCA_per_ID['class']+'\t'+LCA_per_ID['phylum']+'\t'+LCA_per_ID['division']+'\n')
+		outfile.write(ID+'\t'+TargetCategories[ID]['perc']+'\t'+LCA_per_ID['species']+'\t'+LCA_per_ID['genus']+'\t'+LCA_per_ID['family']+'\t'+LCA_per_ID['order']+'\t'+LCA_per_ID['class']+'\t'+LCA_per_ID['phylum']+'\t'+LCA_per_ID['kingdom']+'\n')
 	outfile.close()
 
 # convert taxid information to scienctific names
